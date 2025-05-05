@@ -1,0 +1,324 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-dark: 217, 33%, 21%;
+    --primary: 217, 33%, 30%;
+    --primary-light: 217, 33%, 40%;
+
+    --accent: 123, 58%, 61%;
+    --accent-light: 142, 35%, 65%;
+    --accent-dark: 142, 35%, 45%;
+    
+    --text-light: 0, 0%, 98%;
+    --text-dark: 0, 0%, 15%;
+    
+    --background-dark: 217, 33%, 15%;
+    --background: 217, 33%, 18%;
+    --background-light: 217, 33%, 21%;
+    
+    --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.25);
+    --card-shadow-hover: 0 14px 28px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-text-light font-sans antialiased;
+    background-image: radial-gradient(
+      circle at center, 
+      hsl(var(--background-light)) 0%, 
+      hsl(var(--background)) 60%, 
+      hsl(var(--background-dark)) 100%
+    );
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold leading-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  section {
+    @apply py-16 md:py-24;
+  }
+}
+
+@layer components {
+
+  .neon-box {
+    box-shadow: 
+      0 0 5px hsla(var(--accent), 0.3),
+      0 0 15px hsla(var(--accent), 0.3),
+      0 0 30px hsla(var(--accent), 0.2);
+  }
+
+  .neon-text {
+    @apply text-accent;
+    text-shadow: 
+      0 0 5px hsla(var(--accent), 0.3),
+      0 0 10px hsla(var(--accent), 0.3), 
+      0 0 15px hsla(var(--accent), 0.3),
+      0 0 20px hsla(var(--accent), 0.3);
+  }
+  
+  .neon-text-strong {
+    @apply text-accent;
+    text-shadow: 
+      0 0 5px hsla(var(--accent), 0.5),
+      0 0 10px hsla(var(--accent), 0.5), 
+      0 0 15px hsla(var(--accent), 0.5),
+      0 0 20px hsla(var(--accent), 0.5),
+      0 0 25px hsla(var(--accent), 0.5);
+  }
+
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-md 
+           font-medium text-base transition-all duration-300 
+           focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-text-dark shadow-md hover:bg-accent-dark 
+           focus:ring-accent;
+  }
+
+  .btn-outline {
+    @apply border-2 border-accent text-accent hover:bg-accent/10 
+           focus:ring-accent;
+  }
+  
+  .card-3d {
+    @apply bg-primary rounded-xl p-6 shadow-lg transition-all duration-300;
+    box-shadow: var(--card-shadow);
+    transform: perspective(1000px) rotateX(5deg) rotateY(0deg);
+  }
+  
+  .card-3d:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateZ(10px);
+  }
+
+  .card-3d-neon {
+    @apply bg-primary rounded-xl p-6 transition-all duration-300;
+    box-shadow: 
+      0 0 5px hsla(var(--accent), 0.3),
+      0 0 15px hsla(var(--accent), 0.3),
+      0 0 30px hsla(var(--accent), 0.2),
+      0 10px 20px rgba(0, 0, 0, 0.3), 
+      0 6px 6px rgba(0, 0, 0, 0.25);
+    transform: perspective(1000px) rotateX(5deg) rotateY(0deg);
+  }
+  
+  .card-3d-neon:hover {
+    box-shadow: 
+      0 0 10px hsla(var(--accent), 0.4),
+      0 0 20px hsla(var(--accent), 0.4),
+      0 0 40px hsla(var(--accent), 0.3),
+      0 14px 28px rgba(0, 0, 0, 0.4), 
+      0 10px 10px rgba(0, 0, 0, 0.3);
+    transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateZ(10px);
+  }
+}
+
+@keyframes scaleRotateIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-15deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+.scale-rotate-in {
+  animation: scaleRotateIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+
+
+
+
+/* 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-dark: 210, 13%, 18%;
+    --primary: 210, 13%, 23%;
+    --primary-light: 210, 13%, 28%;
+    
+    --accent: 14, 67%, 51%
+    --accent-light: 14, 67%, 61%;
+    --accent-dark: 14, 67%, 41%;
+    
+    --text-light: 0, 0%, 98%;
+    --text-dark: 210, 13%, 23%;
+    
+    --background-dark: 210, 13%, 18%;
+    --background: 210, 13%, 23%;
+    --background-light: 210, 13%, 28%;
+    
+    --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.25);
+    --card-shadow-hover: 0 14px 28px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-text-light font-sans antialiased;
+    background-image: radial-gradient(
+      circle at center, 
+      hsl(var(--background-light)) 0%, 
+      hsl(var(--background)) 60%, 
+      hsl(var(--background-dark)) 100%
+    );
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold leading-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  section {
+    @apply py-16 md:py-24;
+  }
+}
+
+@layer components {
+
+  .neon-box {
+    box-shadow: 
+      0 0 5px hsla(var(--accent), 0.3),
+      0 0 15px hsla(var(--accent), 0.3),
+      0 0 30px hsla(var(--accent), 0.2);
+  }
+
+  .neon-text {
+    @apply text-accent;
+    text-shadow: 
+      0 0 5px hsla(var(--accent), 0.3),
+      0 0 10px hsla(var(--accent), 0.3), 
+      0 0 15px hsla(var(--accent), 0.3),
+      0 0 20px hsla(var(--accent), 0.3);
+  }
+  
+  .neon-text-strong {
+    @apply text-accent;
+    text-shadow: 
+      0 0 5px hsla(var(--accent), 0.5),
+      0 0 10px hsla(var(--accent), 0.5), 
+      0 0 15px hsla(var(--accent), 0.5),
+      0 0 20px hsla(var(--accent), 0.5),
+      0 0 25px hsla(var(--accent), 0.5);
+  }
+
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-md 
+           font-medium text-base transition-all duration-300 
+           focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-text-dark shadow-md hover:bg-accent-dark 
+           focus:ring-accent;
+  }
+
+  .btn-outline {
+    @apply border-2 border-accent text-accent hover:bg-accent/10 
+           focus:ring-accent;
+  }
+  
+  .card-3d {
+    @apply bg-primary rounded-xl p-6 shadow-lg transition-all duration-300;
+    box-shadow: var(--card-shadow);
+    transform: perspective(1000px) rotateX(5deg) rotateY(0deg);
+  }
+  
+  .card-3d:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateZ(10px);
+  }
+
+  .card-3d-neon {
+    @apply bg-primary rounded-xl p-6 transition-all duration-300;
+    box-shadow: 
+      0 0 5px hsla(var(--accent), 0.3),
+      0 0 15px hsla(var(--accent), 0.3),
+      0 0 30px hsla(var(--accent), 0.2),
+      0 10px 20px rgba(0, 0, 0, 0.3), 
+      0 6px 6px rgba(0, 0, 0, 0.25);
+    transform: perspective(1000px) rotateX(5deg) rotateY(0deg);
+  }
+  
+  .card-3d-neon:hover {
+    box-shadow: 
+      0 0 10px hsla(var(--accent), 0.4),
+      0 0 20px hsla(var(--accent), 0.4),
+      0 0 40px hsla(var(--accent), 0.3),
+      0 14px 28px rgba(0, 0, 0, 0.4), 
+      0 10px 10px rgba(0, 0, 0, 0.3);
+    transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateZ(10px);
+  }
+}
+
+@keyframes scaleRotateIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-15deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+.scale-rotate-in {
+  animation: scaleRotateIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+} */

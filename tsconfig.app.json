@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "composite": true,
+      "jsx": "react-jsx",
+      "lib": ["ES2020", "DOM", "DOM.Iterable"],
+      "module": "ESNext",
+      "moduleResolution": "bundler",
+      "skipLibCheck": true,
+      "target": "ESNext",
+      "useDefineForClassFields": true
+    },
+    "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.jsx", "src/**/*.js"],
+    "exclude": ["node_modules"]
+  }
