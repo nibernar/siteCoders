@@ -1,142 +1,83 @@
-# Configuration Docker Compose pour l'extension du site CODERS🤖
-# Cette configuration orchestre les services frontend, backend et base de données
-# pour l'environnement de développement.
+# TODO: the frontend should check env variables for port and api url
 
 services:
-  # Service Frontend (React)
   frontend:
-    image: node:18-alpine
+    build:
+      context: ./front
+      dockerfile: Dockerfile
     container_name: coders-frontend
-    working_dir: /app
     networks:
-      - frontend-network  # Connexion uniquement au réseau frontend
-    volumes:
-      # Montage du code source pour le développement en temps réel
-      - ./src:/app/src
-      # Montage des fichiers de configuration du projet
-      - ./package.json:/app/package.json
-      - ./package-lock.json:/app/package-lock.json
-      - ./tsconfig.json:/app/tsconfig.json
-      - ./tsconfig.app.json:/app/tsconfig.app.json
-      - ./tsconfig.node.json:/app/tsconfig.node.json
-      - ./tailwind.config.js:/app/tailwind.config.js
-      - ./postcss.config.js:/app/postcss.config.js
-      - ./vite.config.ts:/app/vite.config.ts
-      - ./index.html:/app/index.html
-      # Volume dédié pour node_modules pour améliorer les performances
-      - frontend_node_modules:/app/node_modules
+      - frontend-network
     ports:
-      - "${FRONTEND_PORT:-3000}:3000" # Exposition du port pour accès au frontend
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}" 
     environment:
-      - NODE_ENV=${NODE_ENV:-development}
-      # URL du backend en utilisant le nom du service au lieu de localhost
-      # Cela fonctionne car les services sont dans le même réseau Docker
-      - VITE_API_URL=http://backend:5000
-      # Configuration pour optimiser le hot-reload sur macOS
-      - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING:-true}
-    command: sh -c "npm install && echo 'Attente de 15 secondes pour permettre à la base de données de démarrer...' && sleep 15 && npm run dev"
-    depends_on:
-      - backend # Le frontend dépend du backend
-    # Politique de redémarrage: le conteneur redémarre toujours sauf s'il est explicitement arrêté
-    # Idéal pour le développement car permet aux développeurs d'arrêter manuellement sans redémarrage auto
-    restart: unless-stopped
+      - VITE_API_URL=${VITE_API_URL}
+      - FRONTEND_PORT=${FRONTEND_PORT}
+    #depends_on:
+      #backend:
+        # condition: service_healthy  # TODO: uncomment when backend is ready
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:${FRONTEND_PORT}"]
       interval: 30s
       timeout: 10s
       retries: 3
+    restart: unless-stopped
 
-  # Service Backend (Node.js API)
   backend:
-    image: node:18-alpine
     container_name: coders-backend
-    working_dir: /app
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     networks:
       - frontend-network  # Connexion au réseau frontend pour communiquer avec le frontend
       - backend-network   # Connexion au réseau backend pour communiquer avec la base de données
-    volumes:
-      # Montage du code source pour le développement en temps réel
-      - ./backend:/app
-      # Volume dédié pour node_modules pour améliorer les performances
-      - backend_node_modules:/app/node_modules
-      # Volumes persistants pour les logs et uploads
-      - ./data/logs:/app/logs
-      - ./data/uploads:/app/uploads
     ports:
-      - "${API_PORT:-5001}:5000" # Exposition du port pour accès à l'API
+    - "${BACKEND_PORT}:${BACKEND_PORT}"
     environment:
-      - NODE_ENV=${NODE_ENV:-development}
-      - PORT=5000
-      # Variables de connexion à la base de données utilisant le nom du service
-      # Cela fonctionne car les services sont dans le même réseau Docker
-      - DB_HOST=database
-      - DB_PORT=3306
-      - DB_USER=${DB_USER:-coders_user}
-      - DB_PASSWORD=${DB_PASSWORD:-coders_password}
-      - DB_NAME=${DB_DATABASE:-coders_db}
-      # Variable pour la sécurité JWT
+      - PORT=${BACKEND_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
       - JWT_SECRET=${JWT_SECRET:-dev_jwt_secret_key}
-      # Activation du mode debug
-      - DEBUG=${DEBUG:-app:*}
-      - LOG_LEVEL=${LOG_LEVEL:-debug}
-    command: sh -c "npm install && npm run dev"
     depends_on:
-      - database # Le backend dépend de la base de données
-    # Politique de redémarrage: le conteneur redémarre toujours sauf s'il est explicitement arrêté
-    # Assure la disponibilité du service API tout en permettant un arrêt manuel pendant le développement
+      database:
+        condition: service_healthy
+    #TODO : fix this
+    # healthcheck:
+    #   test: ["CMD", "wget", "-qO-", "http://localhost:${BACKEND_PORT}/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:5000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
-  # Service Base de données (MySQL)
   database:
     image: mysql:8.0
     container_name: coders-database
     networks:
-      - backend-network  # Connexion uniquement au réseau backend pour l'isolation
+      - backend-network
     volumes:
-      # Volume persistant pour les données de la base
       - db_data:/var/lib/mysql
-      # Montage des scripts d'initialisation
       - ./database/init:/docker-entrypoint-initdb.d
-    # Pas d'exposition de port pour la base de données - uniquement accessible par le backend
-    # Les ports sont exposés uniquement dans docker-compose.override.yml pour le développement
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-example_root_password}
-      - MYSQL_DATABASE=${DB_DATABASE:-coders_db}
-      - MYSQL_USER=${DB_USER:-coders_user}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-coders_password}
-    # Politique de redémarrage: le conteneur redémarre toujours sauf s'il est explicitement arrêté
-    # Crucial pour maintenir la persistence des données tout en permettant un arrêt contrôlé
-    restart: unless-stopped
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
 
-# Définition des volumes persistants
 volumes:
-  # Volume pour les node_modules du frontend
-  frontend_node_modules:
-    name: coders-frontend-node-modules
-  # Volume pour les node_modules du backend
-  backend_node_modules:
-    name: coders-backend-node-modules
-  # Volume pour les données de la base de données
   db_data:
     name: coders-db-data
 
-# Configuration du réseau Docker interne
 networks:
-  # Réseau pour la communication entre le frontend et le backend
   frontend-network:
     name: coders-frontend-network
-    driver: bridge
-  # Réseau pour la communication entre le backend et la base de données
   backend-network:
     name: coders-backend-network
-    driver: bridge

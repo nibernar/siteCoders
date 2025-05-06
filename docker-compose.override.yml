@@ -1,64 +1,64 @@
-# Configuration spécifique à l'environnement de développement
-# Cette configuration expose des ports supplémentaires et active des fonctionnalités de debug
-# qui ne sont pas appropriées pour la production.
+# # Configuration spécifique à l'environnement de développement
+# # Cette configuration expose des ports supplémentaires et active des fonctionnalités de debug
+# # qui ne sont pas appropriées pour la production.
 
-services:
-  # Configuration de développement pour le frontend
-  frontend:
-    # Configuration pour optimiser le développement sur macOS
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    # Configuration spécifique au développement pour les volumes
-    volumes:
-      # Ajout de la configuration pour le hot-reload avec optimisation macOS
-      - ./src:/app/src:delegated
-      - ./package.json:/app/package.json:delegated
-      - ./package-lock.json:/app/package-lock.json:delegated
-      - ./tsconfig.json:/app/tsconfig.json:delegated
-      - ./vite.config.ts:/app/vite.config.ts:delegated
-      - ./index.html:/app/index.html:delegated
+# services:
+#   # Configuration de développement pour le frontend
+#   frontend:
+#     # Configuration pour optimiser le développement sur macOS
+#     environment:
+#       - CHOKIDAR_USEPOLLING=true
+#     # Configuration spécifique au développement pour les volumes
+#     volumes:
+#       # Ajout de la configuration pour le hot-reload avec optimisation macOS
+#       - ./src:/app/src:delegated
+#       - ./package.json:/app/package.json:delegated
+#       - ./package-lock.json:/app/package-lock.json:delegated
+#       - ./tsconfig.json:/app/tsconfig.json:delegated
+#       - ./vite.config.ts:/app/vite.config.ts:delegated
+#       - ./index.html:/app/index.html:delegated
   
-  # Configuration de développement pour le backend
-  backend:
-    # Configuration pour le développement avec options de debug
-    environment:
-      - DEBUG=app:*
-      - LOG_LEVEL=debug
-      # Activation du mode développement pour Express
-      - NODE_ENV=development
-    # Configuration spécifique au développement pour les volumes
-    volumes:
-      - ./backend:/app:delegated
+#   # Configuration de développement pour le backend
+#   backend:
+#     # Configuration pour le développement avec options de debug
+#     environment:
+#       - DEBUG=app:*
+#       - LOG_LEVEL=debug
+#       # Activation du mode développement pour Express
+#       - NODE_ENV=development
+#     # Configuration spécifique au développement pour les volumes
+#     volumes:
+#       - ./backend:/app:delegated
   
-  # Configuration de développement pour la base de données
-  database:
-    ports:
-      - "3306:3306"  # Exposition du port en développement pour les outils de gestion
-    # Commentaire explicatif sur la raison de cette exposition
-    # REMARQUE: Cette exposition est uniquement pour le développement local
-    # et permet d'utiliser des outils comme MySQL Workbench, DBeaver, etc.
-    # En production, la base de données ne doit PAS être exposée (voir docker-compose.prod.yml).
-    volumes:
-      - ./database/init:/docker-entrypoint-initdb.d:ro  # Montage en lecture seule
+#   # Configuration de développement pour la base de données
+#   database:
+#     ports:
+#       - "3306:3306"  # Exposition du port en développement pour les outils de gestion
+#     # Commentaire explicatif sur la raison de cette exposition
+#     # REMARQUE: Cette exposition est uniquement pour le développement local
+#     # et permet d'utiliser des outils comme MySQL Workbench, DBeaver, etc.
+#     # En production, la base de données ne doit PAS être exposée (voir docker-compose.prod.yml).
+#     volumes:
+#       - ./database/init:/docker-entrypoint-initdb.d:ro  # Montage en lecture seule
 
-  # Service phpMyAdmin pour la gestion de base de données en développement
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: coders-phpmyadmin
-    environment:
-      PMA_HOST: database
-      PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: example_root_password
-      # Ajout des variables pour résoudre le problème de cookie
-      PMA_ABSOLUTE_URI: http://localhost:8080/
-      COOKIE_SAMESITE: None
-      COOKIE_SECURE: 0
-    ports:
-      - "8080:80"  # Accès via http://localhost:8080
-    depends_on:
-      - database
-    networks:
-      - backend-network
+#   # Service phpMyAdmin pour la gestion de base de données en développement
+#   phpmyadmin:
+#     image: phpmyadmin/phpmyadmin
+#     container_name: coders-phpmyadmin
+#     environment:
+#       PMA_HOST: database
+#       PMA_PORT: 3306
+#       MYSQL_ROOT_PASSWORD: example_root_password
+#       # Ajout des variables pour résoudre le problème de cookie
+#       PMA_ABSOLUTE_URI: http://localhost:8080/
+#       COOKIE_SAMESITE: None
+#       COOKIE_SECURE: 0
+#     ports:
+#       - "8080:80"  # Accès via http://localhost:8080
+#     depends_on:
+#       - database
+#     networks:
+#       - backend-network
 
-    #user : root
-    #mdp : example_root_password
+#     #user : root
+#     #mdp : example_root_password
