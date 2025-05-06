@@ -1,4 +1,4 @@
-# This is the production docker-compose file for the Coder's API project.
+# This is the development docker-compose file for the Coder's API project.
 
 services:
   frontend:
@@ -16,6 +16,9 @@ services:
     #depends_on:
       #backend:
         # condition: service_healthy  # TODO: uncomment when backend is ready
+    volumes:
+      - ./front:/app
+    command: ["npm", "run", "dev"]
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:${FRONTEND_PORT}"]
       interval: 30s
@@ -41,6 +44,10 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
       - JWT_SECRET=${JWT_SECRET:-dev_jwt_secret_key}
+      - NODE_ENV=development
+    volumes:
+      - ./backend:/app
+    command: ["npm", "run", "dev"]
     depends_on:
       database:
         condition: service_healthy

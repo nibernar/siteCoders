@@ -22,7 +22,9 @@ async function startServer() {
     const PORT = process.env.PORT || config.server.port || 5000;
     const server = app.listen(PORT, () => {
       console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || "development"} mode`);
+      
       console.log(`Health check available at http://localhost:${PORT}/health`);
+
       if (dbConnected) {
         console.log("Database connection: OK");
       } else {
