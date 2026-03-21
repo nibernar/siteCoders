@@ -1,6 +1,16 @@
-# This is the production docker-compose file for the Coder's API project.
-
 services:
+  # Service Cloudflare Tunnel
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: coders-tunnel
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    networks:
+      - frontend-network
+      - backend-network
+
   frontend:
     build:
       context: ./front
@@ -8,14 +18,10 @@ services:
     container_name: coders-frontend
     networks:
       - frontend-network
-    ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}" 
     environment:
       - VITE_API_URL=${VITE_API_URL}
       - FRONTEND_PORT=${FRONTEND_PORT}
-    #depends_on:
-      #backend:
-        # condition: service_healthy  # TODO: uncomment when backend is ready
+    # Pas de section "ports" : accessible uniquement via le tunnel
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:${FRONTEND_PORT}"]
       interval: 30s
@@ -29,10 +35,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     networks:
-      - frontend-network  # Connexion au réseau frontend pour communiquer avec le frontend
-      - backend-network   # Connexion au réseau backend pour communiquer avec la base de données
-    ports:
-    - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - frontend-network
+      - backend-network
     environment:
       - PORT=${BACKEND_PORT}
       - DB_HOST=${DB_HOST}
@@ -41,15 +45,10 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
       - JWT_SECRET=${JWT_SECRET:-dev_jwt_secret_key}
+    # Pas de section "ports"
     depends_on:
       database:
         condition: service_healthy
-    #TODO : fix this
-    # healthcheck:
-    #   test: ["CMD", "wget", "-qO-", "http://localhost:${BACKEND_PORT}/health"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
     restart: unless-stopped
 
   database:

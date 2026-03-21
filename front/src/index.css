@@ -1,324 +1,455 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* ─── 1. Mode sombre par classe ─── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── 2. Palette brute (invariante, génère les utilitaires Tailwind) ─── */
+@theme {
+  /* Reset des couleurs par défaut de Tailwind */
+  --color-*: initial;
+
+  /* ── Neutrals ── */
+  --color-neutral-0: oklch(0.99 0.003 280);
+  --color-neutral-50: oklch(0.97 0.005 280);
+  --color-neutral-100: oklch(0.92 0.008 280);
+  --color-neutral-200: oklch(0.82 0.01 280);
+  --color-neutral-300: oklch(0.72 0.012 280);
+  --color-neutral-400: oklch(0.62 0.015 280);
+  --color-neutral-500: oklch(0.52 0.018 280);
+  --color-neutral-600: oklch(0.42 0.02 280);
+  --color-neutral-700: oklch(0.32 0.025 280);
+  --color-neutral-750: oklch(0.26 0.024 280);
+  --color-neutral-800: oklch(0.21 0.022 280);
+  --color-neutral-850: oklch(0.16 0.02 280);
+  --color-neutral-900: oklch(0.12 0.018 280);
+  --color-neutral-950: oklch(0.08 0.015 280);
+
+  /* ── Accent ── */
+  --color-accent-50: oklch(0.97 0.04 280);
+  --color-accent-100: oklch(0.93 0.08 280);
+  --color-accent-200: oklch(0.86 0.12 280);
+  --color-accent-300: oklch(0.78 0.16 280);
+  --color-accent-400: oklch(0.7 0.18 280);
+  --color-accent-500: oklch(0.62 0.2 280);
+  --color-accent-600: oklch(0.52 0.22 280);
+  --color-accent-700: oklch(0.42 0.18 280);
+  --color-accent-800: oklch(0.32 0.16 280);
+  --color-accent-900: oklch(0.22 0.12 280);
+  --color-accent-950: oklch(0.15 0.08 280);
+
+  /* ── Success ── */
+  --color-success-400: oklch(0.72 0.16 150);
+  --color-success-500: oklch(0.6 0.18 150);
+  --color-success-600: oklch(0.45 0.16 150);
+
+  /* ── Error ── */
+  --color-error-400: oklch(0.7 0.18 25);
+  --color-error-500: oklch(0.6 0.2 25);
+  --color-error-600: oklch(0.55 0.2 25);
+
+  /* ── Warning ── */
+  --color-warning-400: oklch(0.8 0.15 80);
+  --color-warning-500: oklch(0.68 0.16 80);
+  --color-warning-600: oklch(0.55 0.15 80);
+
+  /* ── Info ── */
+  --color-info-400: oklch(0.72 0.14 230);
+  --color-info-500: oklch(0.6 0.16 230);
+  --color-info-600: oklch(0.5 0.16 230);
+
+  /* ── Blanc et noir purs ── */
+  --color-white: oklch(1 0 0);
+  --color-black: oklch(0 0 0);
+
+  /* ── Typographie ── */
+  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+
+  /* ── Text sizes ── */
+  --text-display: 3rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 700;
+
+  --text-h1: 2.25rem;
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1--font-weight: 700;
+
+  --text-h2: 1.75rem;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h2--font-weight: 600;
+
+  --text-h3: 1.375rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h3--font-weight: 600;
+
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.4;
+  --text-h4--font-weight: 600;
+
+  --text-body-lg: 1rem;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 400;
+
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.5;
+  --text-body--font-weight: 400;
+
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.01em;
+  --text-label--font-weight: 500;
+
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.4;
+  --text-caption--letter-spacing: 0.01em;
+  --text-caption--font-weight: 400;
+
+  --text-overline: 0.6875rem;
+  --text-overline--line-height: 1.4;
+  --text-overline--letter-spacing: 0.08em;
+  --text-overline--font-weight: 600;
+  --text-overline--text-transform: uppercase;
+
+  --text-stat: 2.5rem;
+  --text-stat--line-height: 1.1;
+  --text-stat--letter-spacing: -0.02em;
+  --text-stat--font-weight: 800;
+
+  /* ── Espacement (base 4px) ── */
+  --spacing: 0.25rem;
+
+  /* ── Border radius ── */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-card: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.3);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 0.35);
+  --shadow-lg: 0 8px 24px oklch(0.35 0.20 280 / 0.35), 0 2px 8px oklch(0 0 0 / 0.25);
+  --shadow-xl: 0 16px 48px oklch(0.35 0.20 280 / 0.40), 0 4px 12px oklch(0 0 0 / 0.3);
+  --shadow-glow-accent: 0 0 20px oklch(0.7 0.18 280 / 0.35);
+  --shadow-glow-accent-sm: 0 0 10px oklch(0.7 0.18 280 / 0.25);
+
+  /* ── Transitions ── */
+  --default-transition-duration: 200ms;
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Durées ── */
+  --duration-instant: 0ms;
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-moderate: 300ms;
+  --duration-slow: 500ms;
+
+  /* ── Courbes d'accélération ── */
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── Animations ── */
+  --animate-fade-in: fade-in 200ms var(--ease-out);
+  --animate-fade-out: fade-out 150ms var(--ease-in);
+  --animate-slide-up: slide-up 250ms var(--ease-spring);
+  --animate-slide-down: slide-down 250ms var(--ease-spring);
+  --animate-scale-in: scale-in 200ms var(--ease-spring);
+  --animate-spin: spin 1s linear infinite;
+  --animate-pulse: pulse 2s var(--ease-default) infinite;
+  --animate-content-show: content-show 200ms var(--ease-spring);
+  --animate-content-hide: content-hide 150ms var(--ease-in);
+  --animate-accordion-down: accordion-down 200ms var(--ease-out);
+  --animate-accordion-up: accordion-up 200ms var(--ease-out);
+
+  /* ── Breakpoints ── */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* ─── 3. Tokens sémantiques (varient par thème) ─── */
+
+/* Dark mode (défaut) */
+.dark {
+  --bg-base: oklch(0.08 0.015 280);
+  --bg-surface: oklch(0.12 0.018 280);
+  --bg-elevated: oklch(0.16 0.02 280);
+  --bg-muted: oklch(0.21 0.022 280);
+  --bg-active: oklch(0.26 0.024 280);
+  --bg-overlay: oklch(0.05 0.01 280 / 0.8);
+
+  --fg-primary: oklch(0.95 0.008 280);
+  --fg-secondary: oklch(0.72 0.012 280);
+  --fg-muted: oklch(0.55 0.015 280);
+  --fg-disabled: oklch(0.38 0.012 280);
+  --fg-on-accent: oklch(1 0 0);
+
+  --accent: oklch(0.7 0.18 280);
+  --accent-hover: oklch(0.62 0.22 280);
+  --accent-subtle: oklch(0.7 0.18 280 / 0.15);
+  --accent-glow: oklch(0.7 0.18 280 / 0.35);
+
+  --success: oklch(0.72 0.16 150);
+  --success-subtle: oklch(0.72 0.16 150 / 0.15);
+  --error: oklch(0.7 0.18 25);
+  --error-subtle: oklch(0.7 0.18 25 / 0.15);
+  --warning: oklch(0.8 0.15 80);
+  --warning-subtle: oklch(0.8 0.15 80 / 0.15);
+  --info: oklch(0.72 0.14 230);
+  --info-subtle: oklch(0.72 0.14 230 / 0.15);
+
+  --border: oklch(1 0 0 / 0.08);
+  --border-strong: oklch(1 0 0 / 0.14);
+  --border-focus: var(--accent);
+
+  --input-bg: oklch(0.1 0.016 280);
+  --input-border: oklch(1 0 0 / 0.12);
+
+  --ring: var(--accent-glow);
+}
+
+/* Light mode */
+:root:not(.dark) {
+  --bg-base: oklch(0.99 0.003 280);
+  --bg-surface: oklch(1 0 0);
+  --bg-elevated: oklch(0.97 0.005 280);
+  --bg-muted: oklch(0.92 0.008 280);
+  --bg-active: oklch(0.9 0.01 280);
+  --bg-overlay: oklch(0.05 0.01 280 / 0.5);
+
+  --fg-primary: oklch(0.13 0.018 280);
+  --fg-secondary: oklch(0.45 0.02 280);
+  --fg-muted: oklch(0.6 0.015 280);
+  --fg-disabled: oklch(0.72 0.01 280);
+  --fg-on-accent: oklch(1 0 0);
+
+  --accent: oklch(0.62 0.2 280);
+  --accent-hover: oklch(0.52 0.22 280);
+  --accent-subtle: oklch(0.62 0.2 280 / 0.1);
+  --accent-glow: oklch(0.62 0.2 280 / 0.2);
+
+  --success: oklch(0.45 0.16 150);
+  --success-subtle: oklch(0.45 0.16 150 / 0.1);
+  --error: oklch(0.55 0.2 25);
+  --error-subtle: oklch(0.55 0.2 25 / 0.1);
+  --warning: oklch(0.55 0.15 80);
+  --warning-subtle: oklch(0.55 0.15 80 / 0.1);
+  --info: oklch(0.5 0.16 230);
+  --info-subtle: oklch(0.5 0.16 230 / 0.1);
+
+  --border: oklch(0 0 0 / 0.1);
+  --border-strong: oklch(0 0 0 / 0.18);
+  --border-focus: var(--accent);
+
+  --input-bg: oklch(1 0 0);
+  --input-border: oklch(0 0 0 / 0.15);
+
+  --ring: var(--accent-glow);
+}
+
+/* ─── 4. Câblage des tokens sémantiques dans Tailwind ─── */
+@theme inline {
+  /* Backgrounds */
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-muted: var(--bg-muted);
+  --color-bg-active: var(--bg-active);
+  --color-bg-overlay: var(--bg-overlay);
+
+  /* Foregrounds */
+  --color-fg-primary: var(--fg-primary);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-disabled: var(--fg-disabled);
+  --color-fg-on-accent: var(--fg-on-accent);
+
+  /* Accent */
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
+
+  /* Status */
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  --color-error: var(--error);
+  --color-error-subtle: var(--error-subtle);
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-info: var(--info);
+  --color-info-subtle: var(--info-subtle);
+
+  /* Borders */
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-border-focus: var(--border-focus);
+
+  /* Components */
+  --color-input-bg: var(--input-bg);
+  --color-input-border: var(--input-border);
+  --color-ring: var(--ring);
+}
+
+/* ─── 5. Keyframes d'animation ─── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes content-show {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes content-hide {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.96); }
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--accordion-content-height); }
+  to { height: 0; }
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-out-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+/* ─── 6. Styles de base ─── */
 @layer base {
-  :root {
-    --primary-dark: 217, 33%, 21%;
-    --primary: 217, 33%, 30%;
-    --primary-light: 217, 33%, 40%;
-
-    --accent: 123, 58%, 61%;
-    --accent-light: 142, 35%, 65%;
-    --accent-dark: 142, 35%, 45%;
-    
-    --text-light: 0, 0%, 98%;
-    --text-dark: 0, 0%, 15%;
-    
-    --background-dark: 217, 33%, 15%;
-    --background: 217, 33%, 18%;
-    --background-light: 217, 33%, 21%;
-    
-    --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.25);
-    --card-shadow-hover: 0 14px 28px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.3);
-  }
-
   html {
-    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-base);
+    color: var(--fg-primary);
   }
 
   body {
-    @apply bg-background text-text-light font-sans antialiased;
-    background-image: radial-gradient(
-      circle at center, 
-      hsl(var(--background-light)) 0%, 
-      hsl(var(--background)) 60%, 
-      hsl(var(--background-dark)) 100%
-    );
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold leading-tight;
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.35 0.015 280);
+    border-radius: var(--radius-full);
   }
 
-  h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.35 0.015 280) transparent;
   }
 
-  h2 {
-    @apply text-3xl md:text-4xl lg:text-5xl;
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
-  h3 {
-    @apply text-2xl md:text-3xl;
+  ::selection {
+    background-color: var(--accent-subtle);
+    color: var(--fg-primary);
   }
 
-  p {
-    @apply leading-relaxed;
-  }
-
-  section {
-    @apply py-16 md:py-24;
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-@layer components {
-
-  .neon-box {
-    box-shadow: 
-      0 0 5px hsla(var(--accent), 0.3),
-      0 0 15px hsla(var(--accent), 0.3),
-      0 0 30px hsla(var(--accent), 0.2);
+/* ─── 7. Typographie prose pour les pages légales ─── */
+.prose-coders {
+  & h2 {
+    @apply text-h3 text-fg-primary mt-10 mb-4;
   }
-
-  .neon-text {
-    @apply text-accent;
-    text-shadow: 
-      0 0 5px hsla(var(--accent), 0.3),
-      0 0 10px hsla(var(--accent), 0.3), 
-      0 0 15px hsla(var(--accent), 0.3),
-      0 0 20px hsla(var(--accent), 0.3);
+  & h3 {
+    @apply text-h4 text-fg-primary mt-8 mb-3;
   }
-  
-  .neon-text-strong {
-    @apply text-accent;
-    text-shadow: 
-      0 0 5px hsla(var(--accent), 0.5),
-      0 0 10px hsla(var(--accent), 0.5), 
-      0 0 15px hsla(var(--accent), 0.5),
-      0 0 20px hsla(var(--accent), 0.5),
-      0 0 25px hsla(var(--accent), 0.5);
+  & p {
+    @apply text-body-lg text-fg-secondary leading-relaxed mb-4;
   }
-
-  .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  & ul,
+  & ol {
+    @apply text-body-lg text-fg-secondary ml-6 mb-4;
   }
-
-  .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-md 
-           font-medium text-base transition-all duration-300 
-           focus:outline-none focus:ring-2 focus:ring-offset-2;
+  & li {
+    @apply mb-2;
   }
-
-  .btn-primary {
-    @apply bg-accent text-text-dark shadow-md hover:bg-accent-dark 
-           focus:ring-accent;
+  & ul li {
+    @apply list-disc;
   }
-
-  .btn-outline {
-    @apply border-2 border-accent text-accent hover:bg-accent/10 
-           focus:ring-accent;
+  & ol li {
+    @apply list-decimal;
   }
-  
-  .card-3d {
-    @apply bg-primary rounded-xl p-6 shadow-lg transition-all duration-300;
-    box-shadow: var(--card-shadow);
-    transform: perspective(1000px) rotateX(5deg) rotateY(0deg);
+  & a {
+    @apply text-accent hover:text-accent-hover underline transition-colors;
   }
-  
-  .card-3d:hover {
-    box-shadow: var(--card-shadow-hover);
-    transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateZ(10px);
-  }
-
-  .card-3d-neon {
-    @apply bg-primary rounded-xl p-6 transition-all duration-300;
-    box-shadow: 
-      0 0 5px hsla(var(--accent), 0.3),
-      0 0 15px hsla(var(--accent), 0.3),
-      0 0 30px hsla(var(--accent), 0.2),
-      0 10px 20px rgba(0, 0, 0, 0.3), 
-      0 6px 6px rgba(0, 0, 0, 0.25);
-    transform: perspective(1000px) rotateX(5deg) rotateY(0deg);
-  }
-  
-  .card-3d-neon:hover {
-    box-shadow: 
-      0 0 10px hsla(var(--accent), 0.4),
-      0 0 20px hsla(var(--accent), 0.4),
-      0 0 40px hsla(var(--accent), 0.3),
-      0 14px 28px rgba(0, 0, 0, 0.4), 
-      0 10px 10px rgba(0, 0, 0, 0.3);
-    transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateZ(10px);
+  & strong {
+    @apply text-fg-primary font-semibold;
   }
 }
-
-@keyframes scaleRotateIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.5) rotate(-15deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0);
-  }
-}
-
-.scale-rotate-in {
-  animation: scaleRotateIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-
-
-
-
-/* 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  :root {
-    --primary-dark: 210, 13%, 18%;
-    --primary: 210, 13%, 23%;
-    --primary-light: 210, 13%, 28%;
-    
-    --accent: 14, 67%, 51%
-    --accent-light: 14, 67%, 61%;
-    --accent-dark: 14, 67%, 41%;
-    
-    --text-light: 0, 0%, 98%;
-    --text-dark: 210, 13%, 23%;
-    
-    --background-dark: 210, 13%, 18%;
-    --background: 210, 13%, 23%;
-    --background-light: 210, 13%, 28%;
-    
-    --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.25);
-    --card-shadow-hover: 0 14px 28px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.3);
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply bg-background text-text-light font-sans antialiased;
-    background-image: radial-gradient(
-      circle at center, 
-      hsl(var(--background-light)) 0%, 
-      hsl(var(--background)) 60%, 
-      hsl(var(--background-dark)) 100%
-    );
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold leading-tight;
-  }
-
-  h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
-  }
-
-  h2 {
-    @apply text-3xl md:text-4xl lg:text-5xl;
-  }
-
-  h3 {
-    @apply text-2xl md:text-3xl;
-  }
-
-  p {
-    @apply leading-relaxed;
-  }
-
-  section {
-    @apply py-16 md:py-24;
-  }
-}
-
-@layer components {
-
-  .neon-box {
-    box-shadow: 
-      0 0 5px hsla(var(--accent), 0.3),
-      0 0 15px hsla(var(--accent), 0.3),
-      0 0 30px hsla(var(--accent), 0.2);
-  }
-
-  .neon-text {
-    @apply text-accent;
-    text-shadow: 
-      0 0 5px hsla(var(--accent), 0.3),
-      0 0 10px hsla(var(--accent), 0.3), 
-      0 0 15px hsla(var(--accent), 0.3),
-      0 0 20px hsla(var(--accent), 0.3);
-  }
-  
-  .neon-text-strong {
-    @apply text-accent;
-    text-shadow: 
-      0 0 5px hsla(var(--accent), 0.5),
-      0 0 10px hsla(var(--accent), 0.5), 
-      0 0 15px hsla(var(--accent), 0.5),
-      0 0 20px hsla(var(--accent), 0.5),
-      0 0 25px hsla(var(--accent), 0.5);
-  }
-
-  .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
-  }
-
-  .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-md 
-           font-medium text-base transition-all duration-300 
-           focus:outline-none focus:ring-2 focus:ring-offset-2;
-  }
-
-  .btn-primary {
-    @apply bg-accent text-text-dark shadow-md hover:bg-accent-dark 
-           focus:ring-accent;
-  }
-
-  .btn-outline {
-    @apply border-2 border-accent text-accent hover:bg-accent/10 
-           focus:ring-accent;
-  }
-  
-  .card-3d {
-    @apply bg-primary rounded-xl p-6 shadow-lg transition-all duration-300;
-    box-shadow: var(--card-shadow);
-    transform: perspective(1000px) rotateX(5deg) rotateY(0deg);
-  }
-  
-  .card-3d:hover {
-    box-shadow: var(--card-shadow-hover);
-    transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateZ(10px);
-  }
-
-  .card-3d-neon {
-    @apply bg-primary rounded-xl p-6 transition-all duration-300;
-    box-shadow: 
-      0 0 5px hsla(var(--accent), 0.3),
-      0 0 15px hsla(var(--accent), 0.3),
-      0 0 30px hsla(var(--accent), 0.2),
-      0 10px 20px rgba(0, 0, 0, 0.3), 
-      0 6px 6px rgba(0, 0, 0, 0.25);
-    transform: perspective(1000px) rotateX(5deg) rotateY(0deg);
-  }
-  
-  .card-3d-neon:hover {
-    box-shadow: 
-      0 0 10px hsla(var(--accent), 0.4),
-      0 0 20px hsla(var(--accent), 0.4),
-      0 0 40px hsla(var(--accent), 0.3),
-      0 14px 28px rgba(0, 0, 0, 0.4), 
-      0 10px 10px rgba(0, 0, 0, 0.3);
-    transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateZ(10px);
-  }
-}
-
-@keyframes scaleRotateIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.5) rotate(-15deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0);
-  }
-}
-
-.scale-rotate-in {
-  animation: scaleRotateIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-} */

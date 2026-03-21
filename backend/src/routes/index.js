@@ -26,4 +26,7 @@ router.get(
   contactController.getContacts // Vous devrez implémenter cette fonction
 );
 
+const surveyRoutes = require('./surveyRoutes');
+router.use('/survey', surveyRoutes);
+
 module.exports = router;

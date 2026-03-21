@@ -1,5 +1,6 @@
 const sequelize = require('../config/database');
 const Contact = require('./Contact');
+const SurveyResponse = require('./SurveyResponse');
 
 // Fonction pour tester la connexion
 const testConnection = async () => {
@@ -27,6 +28,7 @@ const closeConnection = async () => {
 module.exports = {
   sequelize,
   Contact,
+  SurveyResponse,
   testConnection,
   closeConnection
 };
