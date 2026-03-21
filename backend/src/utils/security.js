@@ -1,16 +1,25 @@
 const xss = require('xss');
 const helmet = require('helmet');
 
-// Fonction pour nettoyer les entrées utilisateur contre les attaques XSS
+// Options xss : on supprime les balises HTML dangereuses mais on n'encode PAS
+// les caractères comme / ' " → le bon endroit pour encoder c'est à l'affichage,
+// pas au stockage (Sequelize utilise des requêtes paramétrées contre l'injection SQL).
+const xssOptions = {
+  whiteList: {},
+  stripIgnoreTag: true,
+  stripIgnoreTagBody: ['script', 'style'],
+  escapeHtml: (str) => str, // ne pas encoder les caractères — garder les données brutes
+};
+
 exports.sanitizeInput = (input) => {
   if (typeof input === 'string') {
-    return xss(input);
+    return xss(input, xssOptions);
   } else if (Array.isArray(input)) {
-    return input.map(item => this.sanitizeInput(item));
+    return input.map(item => exports.sanitizeInput(item));
   } else if (typeof input === 'object' && input !== null) {
     const sanitizedObject = {};
     Object.keys(input).forEach(key => {
-      sanitizedObject[key] = this.sanitizeInput(input[key]);
+      sanitizedObject[key] = exports.sanitizeInput(input[key]);
     });
     return sanitizedObject;
   }
@@ -25,7 +34,7 @@ exports.configureHelmet = () => {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:"],
+        imgSrc: ["'self'", 'data:'],
         connectSrc: ["'self'"],
         fontSrc: ["'self'"],
         objectSrc: ["'none'"],
@@ -41,7 +50,6 @@ exports.configureHelmet = () => {
 
 // Middleware pour détecter et bloquer les attaques XSS basiques
 exports.xssProtection = (req, res, next) => {
-  // Vérification des patterns XSS courants dans les paramètres de requête
   const checkForXSS = (obj) => {
     if (!obj) return false;
     const xssPatterns = [
@@ -62,7 +70,6 @@ exports.xssProtection = (req, res, next) => {
     });
   };
   
-  // Vérifier les paramètres de requête et le corps
   if (checkForXSS(req.query) || checkForXSS(req.body)) {
     return res.status(403).json({
       success: false,
@@ -70,7 +77,6 @@ exports.xssProtection = (req, res, next) => {
     });
   }
   
-  // Sanitiser automatiquement le corps de la requête
   if (req.body) {
     req.body = exports.sanitizeInput(req.body);
   }

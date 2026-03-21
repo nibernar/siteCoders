@@ -8,7 +8,14 @@ const sequelize = new Sequelize(
   {
     host: config.database.host,
     dialect: 'mysql',
-    logging: false // Désactive les logs SQL en production
+    logging: false,
+    dialectOptions: {
+      charset: 'UTF8MB4_GENERAL_CI',
+    },
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci',
+    },
   }
 );
 

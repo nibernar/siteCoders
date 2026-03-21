@@ -2,7 +2,6 @@ const sequelize = require('../config/database');
 const Contact = require('./Contact');
 const SurveyResponse = require('./SurveyResponse');
 
-// Fonction pour tester la connexion
 const testConnection = async () => {
   try {
     await sequelize.authenticate();
@@ -14,7 +13,6 @@ const testConnection = async () => {
   }
 };
 
-// Fonction pour fermer la connexion
 const closeConnection = async () => {
   try {
     await sequelize.close();

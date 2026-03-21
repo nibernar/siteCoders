@@ -5,25 +5,24 @@ const { validators } = require('../utils');
 const { base } = require('../middleware');
 const { verifyToken, optionalAuth } = require('../middleware/auth');
 
-// Route publique pour l'authentification (si nécessaire)
+// Route publique pour l authentification (si necessaire)
 router.post('/auth/login', authController.login);
 router.post('/auth/api-token', verifyToken, authController.createApiToken);
 
 // Route de contact avec authentification optionnelle
-// L'authentification n'est pas obligatoire mais si un token est fourni, il sera vérifié
 router.post(
   '/contact',
-  optionalAuth, // Authentification optionnelle
+  optionalAuth,
   validators.contactValidator.validateContactCreation,
   base.dataValidation.handleValidationErrors,
   contactController.createContact
 );
 
-// Routes protégées (si vous avez besoin d'accéder aux contacts)
+// Routes protegees
 router.get(
   '/contacts',
   verifyToken,
-  contactController.getContacts // Vous devrez implémenter cette fonction
+  contactController.getContacts
 );
 
 const surveyRoutes = require('./surveyRoutes');
